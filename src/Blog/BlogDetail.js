@@ -1,10 +1,55 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+
 function BlogDetail(props) {
+	const [data,setData] = useState([]);
+	useEffect(() => {
+		axios.get("https://localhost/laravel8/public/api/blog")
+		.then(res =>{
+			setData(res.data.blog.data)
+			console.log(res.data.blog.data);
+		})
+	},[])
+	function renderData(){
+		if(data.length > 0){
+			return data.map((value, key)=>{
+				return (
+					<div className="single-blog-post">
+						<h3>{value.title}</h3>
+						<div className="post-meta">
+							<ul>
+								<li><i className="fa fa-user"></i> Mac Doe</li>
+								<li><i className="fa fa-clock-o"></i> 1:33 pm</li>
+								<li><i className="fa fa-calendar"></i> DEC 5, 2013</li>
+							</ul>
+							<span>
+								<i className="fa fa-star"></i>
+								<i className="fa fa-star"></i>
+								<i className="fa fa-star"></i>
+								<i className="fa fa-star"></i>
+								<i className="fa fa-star-half-o"></i>
+							</span>
+						</div>
+						<a href="">
+							<img src={`http://localhost/laravel8/public/upload/Blog/image/${value.image}`} alt="" />
+						</a>
+						<p>{value.description}</p>
+						<a className="btn btn-primary" href="">Read More</a>
+					</div>
+				)
+			})
+		} else {
+			return(
+				<p>123123</p>
+			)
+		}
+	}
 	return (
 		<>
 			<div class="col-sm-9">
 				<div class="blog-post-area">
 					<h2 class="title text-center">Latest From our Blog</h2>
-					<div class="single-blog-post">
+					{/* <div class="single-blog-post">
 						<h3>Girls Pink T Shirt arrived in store</h3>
 						<div class="post-meta">
 							<ul>
@@ -41,7 +86,8 @@ function BlogDetail(props) {
 								<li><a href="#">Next</a></li>
 							</ul>
 						</div>
-					</div>
+					</div> */}
+					{renderData()}
 				</div>
 
 				<div class="rating-area">
