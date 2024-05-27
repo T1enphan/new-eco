@@ -1,19 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import Blog from './Blog/Blog';
-import BlogDetail from './Blog/BlogDetail'
-const root = ReactDOM.createRoot(document.getElementById('root'));
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter as Router, Route, Routes, Form } from "react-router-dom";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import Blog from "./Blog/Blog";
+import BlogDetail from "./Blog/BlogDetail";
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <Router>
       <App>
         <Routes>
-          <Route path="/blog-list" element={<Blog></Blog>}/>
-          <Route path="/blog-detail" element={<BlogDetail></BlogDetail>}/>
+          <Route path="/blog-list" element={<Blog></Blog>} />
+          <Route path="/blog-detail/:id" element={<BlogDetail></BlogDetail>} />
         </Routes>
       </App>
     </Router>
