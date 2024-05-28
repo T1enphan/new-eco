@@ -7,6 +7,7 @@ import reportWebVitals from "./reportWebVitals";
 import Blog from "./Blog/Blog";
 import BlogDetail from "./Blog/BlogDetail";
 import ActionRegister from "./Form_regis_login/Index";
+import ActionLogin from "./Form_regis_login/login";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
@@ -16,6 +17,7 @@ root.render(
           <Route path="/blog-list" element={<Blog></Blog>} />
           <Route path="/blog-detail/:id" element={<BlogDetail></BlogDetail>} />
           <Route path="/register" element={<ActionRegister></ActionRegister>} />
+          <Route path="/login" element={<ActionLogin></ActionLogin>} />
         </Routes>
       </App>
     </Router>
