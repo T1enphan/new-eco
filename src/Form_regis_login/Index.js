@@ -2,8 +2,9 @@ import { useState } from "react";
 import axios from "axios";
 
 function ActionRegister() {
-  const [files, setFiles] = useState([]);
-  const [errors, setErros] = useState({});
+  const [files, setFiles] = useState(null);
+  const [avatar, setAvatar] = useState("");
+  const [errors, setErrors] = useState({});
   const [input, setInput] = useState({
     name: "",
     email: "",
@@ -14,13 +15,34 @@ function ActionRegister() {
   });
 
   function handleChange(e) {
-    // const nameInput = e.target.name;
-    // const value = e.target.value;
     const { name, value } = e.target;
     setInput((state) => ({ ...state, [name]: value }));
   }
 
-  //xử lý file
+  const handleUserInputFile = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      const validImageTypes = ["image/png", "image/jpg", "image/jpeg"];
+      if (!validImageTypes.includes(file.type)) {
+        alert("khong dung dinh dang");
+        return;
+      }
+
+      const fileSizeMB = file.size / (1024 * 1024);
+      if (fileSizeMB > 1) {
+        alert("vuot qua 1MB roi");
+        return;
+      }
+
+      let reader = new FileReader();
+      reader.onload = (e) => {
+        setAvatar(e.target.result);
+        setFiles(file);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -37,41 +59,52 @@ function ActionRegister() {
       flag = false;
     }
 
-    if (input.password == "") {
+    if (input.password === "") {
       errorSubmit.password = "vui long nhap password";
       flag = false;
     }
-    if (input.phone == "") {
+    if (input.phone === "") {
       errorSubmit.phone = "vui long nhap phone";
       flag = false;
     }
 
-    if (input.address == "") {
+    if (input.address === "") {
       errorSubmit.address = "vui long nhap dia chi";
       flag = false;
     }
 
-    if (input.level == "") {
+    if (input.level === "") {
       errorSubmit.level = "vui long nhap level";
       flag = false;
     }
 
+    if (!files) {
+      errorSubmit.avatar = "hay import anh vao";
+      flag = false;
+    }
+
     if (!flag) {
-      setErros(errorSubmit);
+      setErrors(errorSubmit);
     } else {
-      setErros({});
-      const payload = {
-        name: input.name,
-        email: input.email,
-        password: input.password,
-        phone: input.phone,
-        address: input.address,
-        level: input.level,
-      };
+      setErrors({});
+
+      const formData = new FormData();
+      formData.append("name", input.name);
+      formData.append("email", input.email);
+      formData.append("password", input.password);
+      formData.append("phone", input.phone);
+      formData.append("address", input.address);
+      formData.append("level", input.level);
+      formData.append("avatar", files);
+
       axios
-        .post("https://localhost/laravel8/public/api/register", payload)
+        .post("https://localhost/laravel8/public/api/register", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
         .then((res) => {
-          console.log(res);
+          console.log(res.formData);
           setInput({
             name: "",
             email: "",
@@ -79,7 +112,9 @@ function ActionRegister() {
             phone: "",
             address: "",
             level: "",
-          }); // Reset form fields
+          });
+          setFiles(null);
+          setAvatar("");
         })
         .catch((error) => {
           console.error("There was an error submitting the form!", error);
@@ -99,12 +134,12 @@ function ActionRegister() {
     <>
       {renderError()}
       <section id="form">
-        <div class="container">
-          <div class="row">
-            <div class="col-sm-4">
-              <div class="signup-form">
+        <div className="container">
+          <div className="row">
+            <div className="col-sm-4">
+              <div className="signup-form">
                 <h2>New User Signup!</h2>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} encType="multipart/form-data">
                   <input
                     name="name"
                     type="text"
@@ -147,8 +182,15 @@ function ActionRegister() {
                     value={input.level}
                     onChange={handleChange}
                   />
-                  {/* <input name="" type="file" placeholder="File avatar" value={input} onChange={handleChange}   /> */}
-                  <button type="submit" class="btn btn-default">
+                  <input
+                    type="file"
+                    placeholder="File avatar"
+                    onChange={handleUserInputFile}
+                  />
+                  {avatar && (
+                    <img src={avatar} alt="Avatar preview" width="100" />
+                  )}
+                  <button type="submit" className="btn btn-default">
                     Signup
                   </button>
                 </form>
@@ -157,8 +199,8 @@ function ActionRegister() {
           </div>
         </div>
       </section>
-      {/* </form> */}
     </>
   );
 }
+
 export default ActionRegister;
