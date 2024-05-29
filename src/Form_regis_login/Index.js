@@ -97,14 +97,21 @@ function ActionRegister() {
       formData.append("level", input.level);
       formData.append("avatar", files);
 
+      for (let [key, value] of formData.entries()) {
+        if (key === "avatar") {
+          console.log(`${key}:`, value); // Log the avatar object
+        }
+      }
+
+
       axios
         .post("https://localhost/laravel8/public/api/register", formData, {
           headers: {
-            "Content-Type": "multipart/form-data",
+            "data-type": "multipart/form-data",
           },
         })
         .then((res) => {
-          console.log(res.formData);
+          console.log(formData);
           setInput({
             name: "",
             email: "",
