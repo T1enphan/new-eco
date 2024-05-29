@@ -79,7 +79,7 @@ function ActionRegister() {
     }
 
     if (!files) {
-      errorSubmit.avatar = "hay import anh vao";
+      errorSubmit.avatar = "hay them anh vao";
       flag = false;
     }
 
@@ -97,11 +97,14 @@ function ActionRegister() {
       formData.append("level", input.level);
       formData.append("avatar", files);
 
-      for (let [key, value] of formData.entries()) {
-        if (key === "avatar") {
-          console.log(`${key}:`, value); // Log the avatar object
-        }
-      }
+
+
+      //  // Log the avatar object
+      // for (let [key, value] of formData.entries()) {
+      //   if (key === "avatar") {
+      //     console.log(`${key}:`, value);
+      //   }
+      // }
 
 
       axios
@@ -111,7 +114,7 @@ function ActionRegister() {
           },
         })
         .then((res) => {
-          console.log(formData);
+          console.log(res.data);
           setInput({
             name: "",
             email: "",
@@ -124,7 +127,7 @@ function ActionRegister() {
           setAvatar("");
         })
         .catch((error) => {
-          console.error("There was an error submitting the form!", error);
+          console.error("Có lỗi rồi anh em :", error);
         });
     }
   };

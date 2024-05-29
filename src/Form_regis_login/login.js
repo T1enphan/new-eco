@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import {useNavigate} from "react-router-dom"
+import {json, useNavigate} from "react-router-dom"
 function ActionLogin() {
   const navigate = useNavigate()
   const [error, setErros] = useState({});
@@ -45,6 +45,7 @@ function ActionLogin() {
             setErros(res.data.errors);
           } else {
             console.log(res);
+            localStorage.setItem("checkLogin", JSON.stringify(res.data))
             navigate("/blog-list")
           }
         })

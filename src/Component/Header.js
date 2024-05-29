@@ -1,4 +1,24 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 function Header(props){
+  const [isLogin, setIsLogin] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(()=>{
+    const checkLogin = localStorage.getItem("checkLogin");
+    if(checkLogin){
+      console.log(checkLogin);
+      setIsLogin(true);
+    }
+  },[]);
+
+  const Logout = () =>{
+    localStorage.removeItem("checkLogin");
+    setIsLogin(false);
+    navigate("/login")
+  }
+
     return (
         <>
           <header id="header">
@@ -129,9 +149,15 @@ function Header(props){
                           </a>
                         </li>
                         <li>
-                          <a href="login.html">
-                            <i class="fa fa-lock"></i> Login
-                          </a>
+                        {isLogin ? (
+                        <a onClick={Logout}>
+                          <i className="fa fa-lock"></i> Logout
+                        </a>
+                      ) : (
+                        <a href="login">
+                          <i className="fa fa-lock"></i> Login
+                        </a>
+                      )}
                         </li>
                       </ul>
                     </div>
@@ -183,6 +209,7 @@ function Header(props){
                             </li>
                             <li>
                               <a href="login.html">Login</a>
+                              {/* day roi */}
                             </li>
                           </ul>
                         </li>
