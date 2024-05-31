@@ -7,12 +7,15 @@ import Replay from "../Comment/Replay";
 function BlogDetail(props) {
   let params = useParams();
   const [data, setData] = useState([]);
+  const [comment, setComment] = useState([])
   useEffect(() => {
     axios
       .get("http://localhost/laravel8/public/api/blog/detail/" + params.id)
       .then((res) => {
         setData(res.data.data);
         // console.log(res.data.data);
+        setComment(res.data.data.comment)
+        // console.log(res.data.data.comment);
       });
   }, []);
   function renderData() {
@@ -69,7 +72,7 @@ function BlogDetail(props) {
           </a>
         </div>
         {/* start comment */}
-        <Comment></Comment>
+        <Comment setComment = {setComment}></Comment>
         {/* end comment */}
 
         {/* start replay */}

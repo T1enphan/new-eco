@@ -55,7 +55,7 @@ function Replay(props) {
     } else {
       setErrors({});
       let url =
-        "https://localhost/laravel8/public/api/blog/comment/" + params.id;
+        "http://localhost/laravel8/public/api/blog/comment/" + params.id;
       let config = {
         headers: {
           Authorization: "Bearer " + accessToken,
@@ -73,14 +73,14 @@ function Replay(props) {
         formData.append("comment", input.comment);
         formData.append("image_user", checkLogin.Auth.avatar);
 
-        // Log dữ liệu để kiểm tra
-        console.log("Form Data:");
-        console.log("id_blog:", props.idBlog);
-        console.log("id_user:", checkLogin.Auth.id);
-        console.log("name_user:", checkLogin.Auth.name);
-        console.log("id_comment:", 0);
-        console.log("comment:", input.comment);
-        console.log("image_user:", checkLogin.Auth.avatar);
+        // // Log dữ liệu để kiểm tra
+        // console.log("Form Data:");
+        // console.log("id_blog:", props.idBlog);
+        // console.log("id_user:", checkLogin.Auth.id);
+        // console.log("name_user:", checkLogin.Auth.name);
+        // console.log("id_comment:", 0);
+        // console.log("comment:", input.comment);
+        // console.log("image_user:", checkLogin.Auth.avatar);
 
         axios
           .post(url, formData, config)
