@@ -9,7 +9,7 @@ function BlogDetail(props) {
   const [data, setData] = useState([]);
   // const [comment, setComment] = useState([]);
   const [listCmt, setListCmt] = useState([]);
-
+  const [IDcha, setIDcha] = useState(null);
   useEffect(() => {
     const getDataCommet = async () => {
       try {
@@ -32,6 +32,12 @@ function BlogDetail(props) {
     //     console.log(res.data.data.comment);
     //   });
   }, []);
+
+  const handleSetIDcha= (id) => {
+    setIDcha(id)
+    console.log("idCha từ blogDetail:" , id);
+  }
+
   const getComment = (dataCmt) => {
     setListCmt((preList) => [...preList, dataCmt]);
   };
@@ -89,11 +95,11 @@ function BlogDetail(props) {
           </a>
         </div>
         {/* start comment */}
-        <ListComment comment={listCmt}></ListComment>
+        <ListComment comment={listCmt}  onSetIDcha = {handleSetIDcha}></ListComment>
         {/* end comment */}
 
         {/* start replay */}
-        <PostComment idBlog={params.id} onComment={getComment}></PostComment>
+        <PostComment idBlog={params.id} onComment={getComment} IDcha={IDcha}></PostComment>
         {/* end replay */}
       </div>
     </>

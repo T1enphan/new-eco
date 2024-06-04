@@ -69,7 +69,7 @@ function PostComment(props) {
         formData.append("id_blog", props.idBlog);
         formData.append("id_user", checkLogin.Auth.id);
         formData.append("name_user", checkLogin.Auth.name);
-        formData.append("id_comment", 0);
+        formData.append("id_comment", props.IDcha ? props.IDcha : 0);
         formData.append("comment", input.comment);
         formData.append("image_user", checkLogin.Auth.avatar);
 
@@ -85,21 +85,20 @@ function PostComment(props) {
         axios
           .post(url, formData, config)
           .then((res) => {
-            // console.log(res);
             const dataCmt = res.data.data;
             props.onComment(dataCmt);
             setInput({ comment: "" });
           })
           .catch((error) => {
-            console.error("Error posting comment:", error);
+            console.error("Hãy nhập comment !", error);
           });
       } else {
-        console.error("User is not logged in. Redirecting to login page.");
+        console.error("Chưa đăng. Nhập hãy đăng nhập!");
         navigate("/login");
       }
     }
   };
-
+  console.log("idCha", props.IDcha);
   return (
     <>
       <form onSubmit={handleSubmit}>

@@ -1,5 +1,8 @@
 import { format, parseISO } from "date-fns";
-function ListComment({ comment }) {
+function ListComment({ comment, onSetIDcha }) {
+  function actionClickReplay(IDcha){
+    console.log(IDcha);
+  }
   function renderData() {
     if (comment.length > 0) {
       return comment.map((value, key) => {
@@ -28,9 +31,9 @@ function ListComment({ comment }) {
                 </li>
               </ul>
               <p>{value.comment}</p>
-              <a class="btn btn-primary" href="">
+              <button class="btn btn-primary" href="" onClick={()=>onSetIDcha(value.id)}>
                 <i class="fa fa-reply"></i>Replay
-              </a>
+              </button>
             </div>
           </li>
         );
