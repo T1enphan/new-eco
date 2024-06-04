@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
-function Replay(props) {
+function PostComment(props) {
   let params = useParams();
   const [isLogin, setIsLogin] = useState(false);
   const [errors, setErrors] = useState("");
@@ -18,7 +18,7 @@ function Replay(props) {
     const storedLogin = localStorage.getItem("checkLogin");
     if (storedLogin) {
       const parsedLogin = JSON.parse(storedLogin);
-      console.log(parsedLogin);
+      // console.log(parsedLogin);
       setIsLogin(true);
       setCheckLogin(parsedLogin);
       setAccessToken(parsedLogin.token); // Lấy token từ dữ liệu trong localStorage
@@ -85,7 +85,10 @@ function Replay(props) {
         axios
           .post(url, formData, config)
           .then((res) => {
-            console.log(res);
+            // console.log(res);
+            const dataCmt = res.data.data;
+            props.onComment(dataCmt);
+            setInput({ comment: "" });
           })
           .catch((error) => {
             console.error("Error posting comment:", error);
@@ -133,4 +136,4 @@ function Replay(props) {
   );
 }
 
-export default Replay;
+export default PostComment;

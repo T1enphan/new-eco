@@ -2,22 +2,39 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Rate from "../Comment/Rate";
-import Comment from "../Comment/Comment";
-import Replay from "../Comment/Replay";
+import ListComment from "../Comment/ListComment";
+import PostComment from "../Comment/PostComment";
 function BlogDetail(props) {
   let params = useParams();
   const [data, setData] = useState([]);
-  const [comment, setComment] = useState([])
+  // const [comment, setComment] = useState([]);
+  const [listCmt, setListCmt] = useState([]);
+
   useEffect(() => {
-    axios
-      .get("http://localhost/laravel8/public/api/blog/detail/" + params.id)
-      .then((res) => {
-        setData(res.data.data);
-        // console.log(res.data.data);
-        setComment(res.data.data.comment)
-        // console.log(res.data.data.comment);
-      });
+    const getDataCommet = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost/laravel8/public/api/blog/detail/" + params.id
+        );
+        setListCmt(response.data.data.comment);
+        setData(response.data.data);
+      } catch (error) {
+        console.log("co loi  : ".error);
+      }
+    };
+    getDataCommet();
+    // axios
+    //   .get("http://localhost/laravel8/public/api/blog/detail/" + params.id)
+    //   .then((res) => {
+    //     setData(res.data.data);
+    //     // console.log(res.data.data);
+    //     setComment(res.data.data.comment);
+    //     console.log(res.data.data.comment);
+    //   });
   }, []);
+  const getComment = (dataCmt) => {
+    setListCmt((preList) => [...preList, dataCmt]);
+  };
   function renderData() {
     if (data) {
       return (
@@ -72,11 +89,11 @@ function BlogDetail(props) {
           </a>
         </div>
         {/* start comment */}
-        <Comment setComment = {setComment}></Comment>
+        <ListComment comment={listCmt}></ListComment>
         {/* end comment */}
 
         {/* start replay */}
-        <Replay idBlog={params.id}></Replay>
+        <PostComment idBlog={params.id} onComment={getComment}></PostComment>
         {/* end replay */}
       </div>
     </>
