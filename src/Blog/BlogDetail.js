@@ -17,6 +17,7 @@ function BlogDetail(props) {
           "http://localhost/laravel8/public/api/blog/detail/" + params.id
         );
         setListCmt(response.data.data.comment);
+        console.table(response.data.data.comment);
         setData(response.data.data);
       } catch (error) {
         console.log("co loi  : ".error);
@@ -33,10 +34,10 @@ function BlogDetail(props) {
     //   });
   }, []);
 
-  const handleSetIDcha= (id) => {
-    setIDcha(id)
-    console.log("idCha từ blogDetail:" , id);
-  }
+  const handleSetIDcha = (id) => {
+    setIDcha(id);
+    console.log("idCha từ blogDetail:", id);
+  };
 
   const getComment = (dataCmt) => {
     setListCmt((preList) => [...preList, dataCmt]);
@@ -95,11 +96,18 @@ function BlogDetail(props) {
           </a>
         </div>
         {/* start comment */}
-        <ListComment comment={listCmt}  onSetIDcha = {handleSetIDcha}></ListComment>
+        <ListComment
+          comment={listCmt}
+          onSetIDcha={handleSetIDcha}
+        ></ListComment>
         {/* end comment */}
 
         {/* start replay */}
-        <PostComment idBlog={params.id} onComment={getComment} IDcha={IDcha}></PostComment>
+        <PostComment
+          idBlog={params.id}
+          onComment={getComment}
+          IDcha={IDcha}
+        ></PostComment>
         {/* end replay */}
       </div>
     </>

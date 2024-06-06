@@ -98,7 +98,7 @@ function PostComment(props) {
       }
     }
   };
-  console.log("idCha", props.IDcha);
+  // console.log("idCha", props.IDcha);
   return (
     <>
       <form onSubmit={handleSubmit}>
