@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import Rate from "../Comment/Rate";
 import ListComment from "../Comment/ListComment";
 import PostComment from "../Comment/PostComment";
+// import 'bootstrap/dist/css/bootstrap.min.css';
 function BlogDetail(props) {
   let params = useParams();
   const [data, setData] = useState([]);
@@ -42,6 +43,9 @@ function BlogDetail(props) {
   const getComment = (dataCmt) => {
     setListCmt((preList) => [...preList, dataCmt]);
   };
+  const fontSizeBlog = {
+    fontSize  : "20px",
+  };
   function renderData() {
     if (data) {
       return (
@@ -73,13 +77,14 @@ function BlogDetail(props) {
               alt=""
             />
           </a>
-          <p>{data.description}</p>
+          <p style={fontSizeBlog}>{data.description}</p>
         </div>
       );
     } else {
       return <p>Loading...</p>;
     }
-  }
+  };
+  
   return (
     <>
       <div class="col-sm-9">
