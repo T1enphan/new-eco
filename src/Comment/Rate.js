@@ -1,80 +1,94 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import StarRatings from "react-star-ratings"
-// import 'bootstrap/dist/css/bootstrap.min.css'
+import { useNavigate, useParams } from "react-router-dom";
+import StarRatings from "react-star-ratings";
 import axios from "axios";
-import { useParams } from "react-router-dom";
-function Rate() {
+
+function Rate(props) {
   const [isLogin, setIsLogin] = useState(false);
   const [rating, setRating] = useState(0);
+  const [checkLogin, setCheckLogin] = useState(null);
+  const [accessToken, setAccessToken] = useState(null);
+
   const navigate = useNavigate();
-  let params = useParams()
+  let params = useParams();
+
   useEffect(() => {
     const storedLogin = localStorage.getItem("checkLogin");
     if (storedLogin) {
       const parsedLogin = JSON.parse(storedLogin);
       console.log(parsedLogin);
-      setIsLogin(true)
+      setIsLogin(true);
+      setCheckLogin(parsedLogin);
+      setAccessToken(parsedLogin.token);
     }
-  }, [])
+  }, []);
 
-  const checkLoginRate = (e) => {
+  const checkLoginRate = () => {
     if (isLogin) {
       console.log("oke đã login");
+      return true;
     } else {
       console.log("Chưa login kìa ông nội");
-      navigate("/login")
-      return false
+      navigate("/login");
+      return false;
     }
   }
 
-  function changeRating(newRating, name) {
-    if(checkLoginRate){
-      setRating(newRating)
-      axios.post("https://localhost/laravel8/public/api/blog/rate/"+ params.id )
+  const changeRating = (newRating, name) => {
+    if (checkLoginRate()) {
+      setRating(newRating);
+      let url = "http://localhost/laravel8/public/api/blog/rate/" + params.id;
+      let config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "Content-Type": "application/x-www-form-urlencoded",
+          Accept: "application/json",
+        },
+      };
+      
+      if (checkLogin && checkLogin.Auth) {
+        const formData = new FormData();
+        formData.append("blog_id", props.idBlog); // Assuming `params.id` is the blog ID
+        formData.append("user_id", checkLogin.Auth.id);
+        formData.append("rate", newRating); // Adding the new rating to formData
+
+        axios
+          .post(url, formData, config)
+          .then((res) => {
+            console.log(formData);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
     }
   }
 
   return (
     <>
-      <div class="rating-area">
-        <div className="container">
-          <div className="row">
-            <div className="col">
-              <StarRatings
-                rating={rating}
-                starRatedColor="blue"
-                changeRating={changeRating}
-                numberOfStars={5}
-                name='rating'
-              />
-
-            </div>
-            <div className="col">
-              <ul class="tag">
-                <li>TAG:</li>
-                <li>
-                  <a class="color" href="">
-                    Pink <span>/</span>
-                  </a>
-                </li>
-                <li>
-                  <a class="color" href="">
-                    T-Shirt <span>/</span>
-                  </a>
-                </li>
-                <li>
-                  <a class="color" href="">
-                    Girls
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
+      <div className="rating-area">
+        <ul className="ratings">
+          <li className="rate-this">Rate this item:</li>
+          <li>
+            <StarRatings
+              rating={rating}
+              starRatedColor="blue"
+              changeRating={changeRating}
+              numberOfStars={5}
+              name='rating'
+            />
+          </li>
+          <li className="color">(6 votes)</li>
+        </ul>
+        <ul className="tag">
+          <li>TAG:</li>
+          <li><a className="color" href="">Pink <span>/</span></a></li>
+          <li><a className="color" href="">T-Shirt <span>/</span></a></li>
+          <li><a className="color" href="">Girls</a></li>
+        </ul>
       </div>
     </>
-  )
+  );
 }
+
 export default Rate;

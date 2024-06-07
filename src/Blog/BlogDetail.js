@@ -18,7 +18,7 @@ function BlogDetail(props) {
           "http://localhost/laravel8/public/api/blog/detail/" + params.id
         );
         setListCmt(response.data.data.comment);
-        console.table(response.data.data.comment);
+        // console.table(response.data.data.comment);
         setData(response.data.data);
       } catch (error) {
         console.log("co loi  : ".error);
@@ -93,7 +93,7 @@ function BlogDetail(props) {
           {renderData()}
         </div>
         {/* start rate */}
-        <Rate></Rate>
+        <Rate idBlog={params.id}></Rate>
         {/* end rate */}
         <div class="socials-share">
           <a href="">
