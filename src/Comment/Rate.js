@@ -8,7 +8,7 @@ function Rate(props) {
   const [rating, setRating] = useState(0);
   const [checkLogin, setCheckLogin] = useState(null);
   const [accessToken, setAccessToken] = useState(null);
-
+  // const [numberOfVotes, setNumberOfVotes] = useState(0);
   const navigate = useNavigate();
   let params = useParams();
 
@@ -21,6 +21,17 @@ function Rate(props) {
       setCheckLogin(parsedLogin);
       setAccessToken(parsedLogin.token);
     }
+    // axios.get("http://localhost/laravel8/public/api/blog/rate/" + params.id)
+    // .then((res)=>{
+    //   const data = res.data;
+    //   if (data.numberOfVotes) {
+    //     setNumberOfVotes(data.numberOfVotes);
+    //     console.log(data.numberOfVotes);
+    //     }
+    // })
+    // .catch(error =>{
+    //   console.error("Loi du lieu: ", error);
+    // })
   }, []);
 
   const checkLoginRate = () => {
@@ -28,7 +39,7 @@ function Rate(props) {
       console.log("oke đã login");
       return true;
     } else {
-      console.log("Chưa login kìa ông nội");
+      console.log("Chưa login");
       navigate("/login");
       return false;
     }
@@ -48,9 +59,9 @@ function Rate(props) {
       
       if (checkLogin && checkLogin.Auth) {
         const formData = new FormData();
-        formData.append("blog_id", props.idBlog); // Assuming `params.id` is the blog ID
+        formData.append("blog_id", props.idBlog);
         formData.append("user_id", checkLogin.Auth.id);
-        formData.append("rate", newRating); // Adding the new rating to formData
+        formData.append("rate", newRating);
 
         axios
           .post(url, formData, config)
@@ -78,7 +89,7 @@ function Rate(props) {
               name='rating'
             />
           </li>
-          <li className="color">(6 votes)</li>
+          <li className="color">(12 votes)</li>
         </ul>
         <ul className="tag">
           <li>TAG:</li>
