@@ -43,7 +43,7 @@ function ActionLogin() {
         .then((res) => {
           console.log(res);
           if (res.data.errors) {
-            setErros(res.data.errors);
+            setErros(res.data.error);
           } else {
             console.log(res);
             localStorage.setItem("checkLogin", JSON.stringify(res.data));

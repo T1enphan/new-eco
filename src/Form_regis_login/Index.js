@@ -108,7 +108,7 @@ function ActionRegister() {
 
 
       axios
-        .post("https://localhost/laravel8/public/api/register", formData, {
+        .post("http://localhost/laravel8/public/api/register", formData, {
           headers: {
             "data-type": "multipart/form-data",
           },

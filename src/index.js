@@ -9,6 +9,7 @@ import BlogDetail from "./Blog/BlogDetail";
 import ActionRegister from "./Form_regis_login/Index";
 import ActionLogin from "./Form_regis_login/login";
 import UpdateAccount from "./UserAccount/UpdateAccount";
+import AddProduct from "./Product/addProduct";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
@@ -19,6 +20,7 @@ root.render(
             path="/account/update"
             element={<UpdateAccount></UpdateAccount>}
           />
+          <Route path="/account/my-product" element={<AddProduct></AddProduct>}/>
           <Route path="/blog-list" element={<Blog></Blog>} />
           <Route path="/blog-detail/:id" element={<BlogDetail></BlogDetail>} />
           <Route path="/register" element={<ActionRegister></ActionRegister>} />

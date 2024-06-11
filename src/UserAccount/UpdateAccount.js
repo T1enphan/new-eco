@@ -134,10 +134,9 @@ function UpdateAccount() {
 
         const response = await axios.post(url, formData, config);
         console.log("User updated successfully:", response.data);
-        // Handle success (e.g., navigate to another page or show a success message)
+        localStorage.setItem("checkLogin", JSON.stringify(response.data));
       } catch (error) {
         console.error("Error updating user:", error.response ? error.response.data : error.message);
-        // Handle error (e.g., show an error message)
       }
     }
   };

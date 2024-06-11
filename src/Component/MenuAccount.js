@@ -53,7 +53,7 @@ function MenuAccount() {
                     <span class="badge pull-right">
                       <i class="fa fa-plus"></i>
                     </span>
-                    MY ACCOUNT
+                    MY PRODUCT
                   </a>
                 </h4>
               </div>
