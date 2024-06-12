@@ -26,7 +26,7 @@ function UpdateAccount() {
       setAccessToken(userData.token);
       const userAuth = userData.Auth;
       setUser({
-
+        //gán data đã có vào trong input
         id: userAuth.id,
         name: userAuth.name,
         email: userAuth.email,
