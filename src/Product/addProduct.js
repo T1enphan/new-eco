@@ -5,10 +5,9 @@ import { useNavigate } from "react-router-dom";
 function AddProduct() {
   const [isLogin, setIsLogin] = useState(false);
   const [accessToken, setAccessToken] = useState(null);
-  const [errors, setErorrs] = useState({});
+  const [errors, setErrors] = useState({});
   const [checkLogin, setCheckLogin] = useState(null);
   const [files, setFiles] = useState(null);
-  const [avatar, setAvatar] = useState("");
   const navigate = useNavigate();
   const [dataBrand, setDataBrand] = useState([]);
   const [dataCategory, setDataCategory] = useState([]);
@@ -23,6 +22,7 @@ function AddProduct() {
     detail: "",
     status: "1",
   });
+
   useEffect(() => {
     let dataUser = localStorage.getItem("checkLogin");
     if (dataUser) {
@@ -39,11 +39,12 @@ function AddProduct() {
         setDataBrand(response.data.brand);
         setDataCategory(response.data.category);
       } catch (error) {
-        console.log("co loi  : ".error);
+        console.log("co loi: ", error);
       }
     };
     GetData();
   }, []);
+
   function checkLoginUser() {
     if (isLogin) {
       console.log("Đã login");
@@ -54,62 +55,31 @@ function AddProduct() {
     }
   }
 
-  //   const handleUserInputFile = (e) => {
-  //     const file = e.target.files[0];
-
-  //     if (file) {
-  //       const validImageTypes = ["image/png", "image/jpg", "image/jpeg"];
-  //       if (!validImageTypes.includes(file.type)) {
-  //         alert("không đúng định dạng");
-  //         return;
-  //       }
-
-  //       const fileSizeMB = file.size / (1024 * 1024);
-  //       if (fileSizeMB > 1) {
-  //         alert("vượt quá 1MB rồi");
-  //         return;
-  //       }
-
-  //       let reader = new FileReader();
-  //       reader.onload = (e) => {
-  //         setAvatar(e.target.result);
-  //         setFiles(file);
-  //       };
-  //       reader.readAsDataURL(file);
-  //     }
-  //   };
-
   const handleUserInputFile = (e) => {
-    const files = Array.from(e.target.files);
+    const selectedFiles = Array.from(e.target.files);
     const validImageTypes = ["image/png", "image/jpg", "image/jpeg"];
     let error = false;
 
-    if (files.length > 3) {
-      alert("Bạn chỉ có thể tải lên tối đa 3 ảnh");
+    if (selectedFiles.length > 3) {
+      console.log("Bạn chỉ có thể tải lên tối đa 3 ảnh");
       error = true;
     }
 
-    files.forEach((file) => {
+    selectedFiles.forEach((file) => {
       if (!validImageTypes.includes(file.type)) {
-        alert("không đúng định dạng");
+        console.log("Không đúng định dạng");
         error = true;
       }
 
       const fileSizeMB = file.size / (1024 * 1024);
       if (fileSizeMB > 1) {
-        alert("vượt quá 1MB rồi");
+        console.log("Vượt quá 1MB rồi");
         error = true;
       }
     });
 
     if (!error) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setAvatar(e.target.result);
-      };
-      reader.readAsDataURL(files[0]);
-
-      setFiles(files); // Lưu trữ mảng tệp
+      setFiles(selectedFiles);
     }
   };
 
@@ -125,47 +95,47 @@ function AddProduct() {
     let flag = true;
 
     if (inputs.name === "") {
-      errorSubmit.name = "Vui Long Nhap Ten";
+      errorSubmit.name = "Vui Lòng Nhập Tên";
       flag = false;
     }
     if (inputs.brand === "") {
-      errorSubmit.brand = "Vui Long Nhap brand";
+      errorSubmit.brand = "Vui Lòng Nhập Brand";
       flag = false;
     }
     if (inputs.category === "") {
-      errorSubmit.category = "Vui Long Nhap category";
+      errorSubmit.category = "Vui Lòng Nhập Category";
       flag = false;
     }
     if (inputs.company === "") {
-      errorSubmit.company = "Vui Long Nhap company";
+      errorSubmit.company = "Vui Lòng Nhập Company";
       flag = false;
     }
     if (inputs.price === "") {
-      errorSubmit.price = "Vui Long Nhap gia";
+      errorSubmit.price = "Vui Lòng Nhập Giá";
       flag = false;
     }
     if (inputs.sale === "") {
-      errorSubmit.sale = "Vui Long Nhap sale";
+      errorSubmit.sale = "Vui Lòng Nhập Sale";
       flag = false;
     }
     if (inputs.status === "") {
-      errorSubmit.status = "Vui Long Nhap trang thai";
+      errorSubmit.status = "Vui Lòng Nhập Trạng Thái";
       flag = false;
     }
     if (inputs.detail === "") {
-      errorSubmit.detail = "Vui Long Nhap mota";
+      errorSubmit.detail = "Vui Lòng Nhập Mô Tả";
       flag = false;
     }
 
     if (!files || files.length === 0) {
-      errorSubmit.avatar = "hãy thêm ảnh vào";
+      errorSubmit.avatar = "Hãy thêm ảnh vào";
       flag = false;
     }
 
     if (!flag) {
-      setErorrs(errorSubmit);
+      setErrors(errorSubmit);
     } else {
-      setErorrs({});
+      setErrors({});
       try {
         let url = "http://localhost/laravel8/public/api/user/product/add";
         let config = {
@@ -178,32 +148,35 @@ function AddProduct() {
         const formData = new FormData();
         formData.append("id_user", checkLogin.Auth.id);
         formData.append("name", inputs.name);
-        formData.append("brand", inputs.category);
-        formData.append("category", inputs.brand);
+        formData.append("brand", inputs.brand);
+        formData.append("category", inputs.category);
         formData.append("price", inputs.price);
         formData.append("status", inputs.status);
         formData.append("sale", inputs.sale);
         formData.append("detail", inputs.detail);
         formData.append("company", inputs.company);
 
-        Object.keys(avatar).map((item, i) => {
-          formData.append("file[]", avatar[item]);
-          console.log(avatar);
+        files.forEach((file, index) => {
+          formData.append(`file[${index}]`, file);
         });
 
         const response = await axios.post(url, formData, config);
         console.log(response);
-      } catch {
-        console.error("Error add product:", errors);
+      } catch (error) {
+        console.error("Error add product:", error.response ? error.response.data : error.message);
       }
     }
   };
 
   function renderError() {
     if (Object.keys(errors).length > 0) {
-      return Object.keys(errors).map((key, index) => {
-        return <li key={index}>{errors[key]}</li>;
-      });
+      return (
+        <ul>
+          {Object.keys(errors).map((key, index) => (
+            <li key={index}>{errors[key]}</li>
+          ))}
+        </ul>
+      );
     }
   }
 
@@ -263,7 +236,7 @@ function AddProduct() {
               <input
                 value={inputs.sale}
                 name="sale"
-                type="text"
+                type={inputs.status === "0" ? "number" : "hidden"}
                 placeholder="Sale"
                 onChange={handleChange}
               />
@@ -296,4 +269,5 @@ function AddProduct() {
     </>
   );
 }
+
 export default AddProduct;
