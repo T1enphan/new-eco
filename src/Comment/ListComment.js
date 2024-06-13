@@ -10,34 +10,34 @@ function ListComment({ comment, onSetIDcha }) {
         const formatNam = format(parseISO(value.created_at), "dd/MM/yyyy");
         if (value.id_comment === 0) {
           return (
-            <li key={key} class="media">
-              <a class="pull-left" href="#">
+            <li key={key} className="media">
+              <a className="pull-left" href="#">
                 <img
-                  class="media-object"
+                  className="media-object"
                   src="/images/blog/man-four.jpg"
                   alt=""
                 />
               </a>
-              <div class="media-body">
-                <ul class="sinlge-post-meta">
+              <div className="media-body">
+                <ul className="sinlge-post-meta">
                   <li>
-                    <i class="fa fa-user"></i>
+                    <i className="fa fa-user"></i>
                     {value.name_user}
                   </li>
                   <li>
-                    <i class="fa fa-clock-o"></i> {formatGio}
+                    <i className="fa fa-clock-o"></i> {formatGio}
                   </li>
                   <li>
-                    <i class="fa fa-calendar"></i> {formatNam}
+                    <i className="fa fa-calendar"></i> {formatNam}
                   </li>
                 </ul>
                 <p>{value.comment}</p>
                 <button
-                  class="btn btn-primary"
+                  className="btn btn-primary"
                   href=""
                   onClick={() => onSetIDcha(value.id)}
                 >
-                  <i class="fa fa-reply"></i>Replay
+                  <i className="fa fa-reply"></i>Replay
                 </button>
               </div>
               <li>{renderDataCon(value.id)}</li>
@@ -54,30 +54,30 @@ function ListComment({ comment, onSetIDcha }) {
         const formatNam = format(parseISO(value.created_at), "dd/MM/yyyy");
         if (value.id_comment === onSetIDcha) {
           return (
-            <li class="media second-media">
-              <a class="pull-left" href="#">
+            <li className="media second-media">
+              <a className="pull-left" href="#">
                 <img
-                  class="media-object"
+                  className="media-object"
                   src="/images/blog/man-four.jpg"
                   alt=""
                 />
               </a>
-              <div class="media-body">
-                <ul class="sinlge-post-meta">
+              <div className="media-body">
+                <ul className="sinlge-post-meta">
                   <li>
-                    <i class="fa fa-user"></i>
+                    <i className="fa fa-user"></i>
                     {value.name_user}
                   </li>
                   <li>
-                    <i class="fa fa-clock-o"></i> {formatGio}
+                    <i className="fa fa-clock-o"></i> {formatGio}
                   </li>
                   <li>
-                    <i class="fa fa-calendar"></i> {formatNam}
+                    <i className="fa fa-calendar"></i> {formatNam}
                   </li>
                 </ul>
                 <p>{value.comment}</p>
-                <a class="btn btn-primary" href="">
-                  <i class="fa fa-reply"></i>Replay
+                <a className="btn btn-primary" href="">
+                  <i className="fa fa-reply"></i>Replay
                 </a>
               </div>
             </li>
@@ -92,9 +92,9 @@ function ListComment({ comment, onSetIDcha }) {
 
   return (
     <>
-      <div class="response-area">
+      <div className="response-area">
         <h2>{comment.length} RESPONSES</h2>
-        <ul class="media-list">{renderDataCha()}</ul>
+        <ul className="media-list">{renderDataCha()}</ul>
       </div>
     </>
   );

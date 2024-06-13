@@ -14,7 +14,7 @@ function Blog(props) {
       .catch((error) => console.error(error));
   }, []);
   const fontSizeBlog = {
-    fontSize  : "15px",
+    fontSize: "15px",
   };
   function renderData() {
     if (data.length > 0) {
@@ -62,16 +62,16 @@ function Blog(props) {
 
   return (
     <>
-      <div class="col-sm-9">
-        <div class="blog-post-area">
-          <h2 class="title text-center">Latest From our Blog</h2>
-          
+      <div className="col-sm-9">
+        <div className="blog-post-area">
+          <h2 className="title text-center">Latest From our Blog</h2>
+
           {renderData()}
 
-          <div class="pagination-area">
-            <ul class="pagination">
+          <div className="pagination-area">
+            <ul className="pagination">
               <li>
-                <a href="" class="active">
+                <a href="" className="active">
                   1
                 </a>
               </li>
@@ -83,7 +83,7 @@ function Blog(props) {
               </li>
               <li>
                 <a href="">
-                  <i class="fa fa-angle-double-right"></i>
+                  <i className="fa fa-angle-double-right"></i>
                 </a>
               </li>
             </ul>

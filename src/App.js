@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 import MenuAccount from "./Component/MenuAccount";
 function App(props) {
   const duongLink = useLocation();
-  console.log(duongLink);
+  // console.log(duongLink);
   return (
     <div>
       <Header></Header>

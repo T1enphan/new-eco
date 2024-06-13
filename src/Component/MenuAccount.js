@@ -1,27 +1,27 @@
 function MenuAccount() {
   return (
     <>
-      <div class="col-sm-3">
-        <div class="left-sidebar">
+      <div className="col-sm-3">
+        <div className="left-sidebar">
           <h2>Account</h2>
-          <div class="panel-group category-products" id="accordian">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h4 class="panel-title">
+          <div className="panel-group category-products" id="accordian">
+            <div className="panel panel-default">
+              <div className="panel-heading">
+                <h4 className="panel-title">
                   <a
                     data-toggle="collapse"
                     data-parent="#accordian"
                     href="#sportswear"
                   >
-                    <span class="badge pull-right">
-                      <i class="fa fa-plus"></i>
+                    <span className="badge pull-right">
+                      <i className="fa fa-plus"></i>
                     </span>
                     ACCOUNT
                   </a>
                 </h4>
               </div>
-              <div id="sportswear" class="panel-collapse collapse">
-                <div class="panel-body">
+              <div id="sportswear" className="panel-collapse collapse">
+                <div className="panel-body">
                   <ul>
                     <li>
                       <a href="">Nike </a>
@@ -42,23 +42,23 @@ function MenuAccount() {
                 </div>
               </div>
             </div>
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h4 class="panel-title">
+            <div className="panel panel-default">
+              <div className="panel-heading">
+                <h4 className="panel-title">
                   <a
                     data-toggle="collapse"
                     data-parent="#accordian"
                     href="#mens"
                   >
-                    <span class="badge pull-right">
-                      <i class="fa fa-plus"></i>
+                    <span className="badge pull-right">
+                      <i className="fa fa-plus"></i>
                     </span>
                     MY PRODUCT
                   </a>
                 </h4>
               </div>
-              <div id="mens" class="panel-collapse collapse">
-                <div class="panel-body">
+              <div id="mens" className="panel-collapse collapse">
+                <div className="panel-body">
                   <ul>
                     <li>
                       <a href="">Fendi</a>

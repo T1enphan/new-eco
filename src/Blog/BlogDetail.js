@@ -44,7 +44,7 @@ function BlogDetail(props) {
     setListCmt((preList) => [...preList, dataCmt]);
   };
   const fontSizeBlog = {
-    fontSize  : "20px",
+    fontSize: "20px",
   };
   function renderData() {
     if (data) {
@@ -83,19 +83,19 @@ function BlogDetail(props) {
     } else {
       return <p>Loading...</p>;
     }
-  };
-  
+  }
+
   return (
     <>
-      <div class="col-sm-9">
-        <div class="blog-post-area">
-          <h2 class="title text-center">Latest From our Blog</h2>
+      <div className="col-sm-9">
+        <div className="blog-post-area">
+          <h2 className="title text-center">Latest From our Blog</h2>
           {renderData()}
         </div>
         {/* start rate */}
         <Rate idBlog={params.id}></Rate>
         {/* end rate */}
-        <div class="socials-share">
+        <div className="socials-share">
           <a href="">
             <img src="/images/blog/socials.png" alt="" />
           </a>
