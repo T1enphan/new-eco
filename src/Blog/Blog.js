@@ -9,10 +9,11 @@ function Blog(props) {
       .get("http://localhost/laravel8/public/api/blog")
       .then((res) => {
         setData(res.data.blog.data);
-        // console.log(res.data.blog.data);
+        console.log(res.data.blog.data);
       })
       .catch((error) => console.error(error));
   }, []);
+
   const fontSizeBlog = {
     fontSize: "15px",
   };
@@ -20,7 +21,7 @@ function Blog(props) {
     if (data.length > 0) {
       return data.map((value, key) => {
         return (
-          <div className="single-blog-post">
+          <div key={key} className="single-blog-post">
             <h3>{value.title}</h3>
             <div className="post-meta">
               <ul>

@@ -114,7 +114,7 @@ function AddProduct() {
       errorSubmit.price = "Vui Lòng Nhập Giá";
       flag = false;
     }
-    if (inputs.sale === "") {
+    if (inputs.status === 0 && inputs.sale === "") {
       errorSubmit.sale = "Vui Lòng Nhập Sale";
       flag = false;
     }
@@ -163,7 +163,10 @@ function AddProduct() {
         const response = await axios.post(url, formData, config);
         console.log(response);
       } catch (error) {
-        console.error("Error add product:", error.response ? error.response.data : error.message);
+        console.error(
+          "Error add product:",
+          error.response ? error.response.data : error.message
+        );
       }
     }
   };

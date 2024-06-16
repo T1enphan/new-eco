@@ -1,80 +1,77 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+
 function GetMyProduct() {
-    return (
-        <>
-            <div className="col-sm-9">
-                <div className="table-responsive cart_info">
-                    <table className="table table-condensed">
-                        <thead>
-                            <tr className="cart_menu">
-                                <td className="image">image</td>
-                                <td className="description">name</td>
-                                <td className="price">price</td>
+  const [data, setData] = useState({});
+  const [accessToken, setAccessToken] = useState(null);
 
-                                <td className="total">action</td>
+  useEffect(() => {
+    const fetchData = async () => {
+      let dataUser = localStorage.getItem("checkLogin");
+      if (dataUser) {
+        dataUser = JSON.parse(dataUser);
+        setAccessToken(dataUser.token);
 
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td className="cart_product">
-                                    <a href=""><img src="images/cart/one.png" alt="" /></a>
-                                </td>
-                                <td className="cart_description">
-                                    <h4><a href="">Colorblock Scuba</a></h4>
+        const headers = {
+          Authorization: `Bearer ${dataUser.token}`,
+        };
 
-                                </td>
-                                <td className="cart_price">
-                                    <p>$59</p>
-                                </td>
+        try {
+          const res = await axios.get(
+            "http://localhost/laravel8/public/api/user/my-product",
+            { headers }
+          );
+          setData(res.data.data);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    };
 
-                                <td className="cart_total">
-                                    <a>edit</a>
-                                    <a>delete</a>
-                                </td>
-
-                            </tr>
-                            <tr>
-                                <td className="cart_product">
-                                    <a href=""><img src="images/cart/one.png" alt="" /></a>
-                                </td>
-                                <td className="cart_description">
-                                    <h4><a href="">Colorblock Scuba</a></h4>
-
-                                </td>
-                                <td className="cart_price">
-                                    <p>$59</p>
-                                </td>
-
-                                <td className="cart_total">
-                                    <a>edit</a>
-                                    <a>delete</a>
-                                </td>
-
-                            </tr>
-                            <tr>
-                                <td className="cart_product">
-                                    <a href=""><img src="images/cart/one.png" alt="" /></a>
-                                </td>
-                                <td className="cart_description">
-                                    <h4><a href="">Colorblock Scuba</a></h4>
-
-                                </td>
-                                <td className="cart_price">
-                                    <p>$59</p>
-                                </td>
-
-                                <td className="cart_total">
-                                    <a>edit</a>
-                                    <a>delete</a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </>
-    )
+    fetchData();
+  }, []);
+  function renderData() {
+    console.log(data);
+    if (data) {
+      return Object.keys(data).map((key, index) => {
+        const item = data[key];
+        return (
+          <tr key={index}>
+            <th scope="row">{index + 1}</th>
+            <td>{item.name}</td>
+            <td>
+              <img src={item.image} width="50" height="50" />
+            </td>
+            <td>{item.price}</td>
+            <td className="text-center">
+              <button className="btn btn-warning">Edit</button>
+              <button className="btn btn-danger">Delete</button>
+            </td>
+          </tr>
+        );
+      });
+    } else {
+      console.log(2);
+    }
+  }
+  return (
+    <>
+      <div className="col-sm-9">
+        <table className="table table-bordered cart_info">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Image</th>
+              <th scope="col">Price</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>{renderData()}</tbody>
+        </table>
+      </div>
+    </>
+  );
 }
+
 export default GetMyProduct;
