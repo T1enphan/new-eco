@@ -1,60 +1,35 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 function GetMyProduct() {
   const [data, setData] = useState({});
   const [accessToken, setAccessToken] = useState(null);
+  const fetchData = async () => {
+    let dataUser = localStorage.getItem("checkLogin");
+    if (dataUser) {
+      dataUser = JSON.parse(dataUser);
+      setAccessToken(dataUser.token);
+
+      const headers = {
+        Authorization: `Bearer ${dataUser.token}`,
+      };
+
+      try {
+        const res = await axios.get(
+          "http://localhost/laravel8/public/api/user/my-product",
+          { headers }
+        );
+        setData(res.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      let dataUser = localStorage.getItem("checkLogin");
-      if (dataUser) {
-        dataUser = JSON.parse(dataUser);
-        setAccessToken(dataUser.token);
-
-        const headers = {
-          Authorization: `Bearer ${dataUser.token}`,
-        };
-
-        try {
-          const res = await axios.get(
-            "http://localhost/laravel8/public/api/user/my-product",
-            { headers }
-          );
-          setData(res.data.data);
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    };
-
     fetchData();
   }, []);
-
-  // const handleDelete = async (id) => {
-  //   if (accessToken) {
-  //     const headers = {
-  //       Authorization: `Bearer ${accessToken}`,
-  //     };
-
-  //     try {
-  //       const res = await axios.post(
-  //         `http://localhost/laravel8/public/api/user/product/delete/${id}`,
-  //         { headers }
-  //       );
-  //       if (res.status === 200) {
-  //         // Xóa sản phẩm thành công, cập nhật lại dữ liệu
-  //         setData((prevData) => {
-  //           const updatedData = { ...prevData };
-  //           delete updatedData[id];
-  //           return updatedData;
-  //         });
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }
-  // };
 
   const handleDelete = async (id) => {
     if (accessToken) {
@@ -63,22 +38,16 @@ function GetMyProduct() {
       };
 
       try {
-        const res = await axios.post(
+        const res = await axios.get(
           `http://localhost/laravel8/public/api/user/product/delete/${id}`,
-          {},
           { headers }
         );
         if (res.status === 200) {
-          // Xóa sản phẩm thành công, cập nhật lại dữ liệu
-          setData((prevData) => {
-            const updatedData = { ...prevData };
-            delete updatedData[id];
-            return updatedData;
-          });
+          fetchData();
         }
       } catch (error) {
         if (error.response && error.response.status === 401) {
-          console.log("Unauthorized: Invalid token");
+          console.log("Unauthorized: Invalid token", accessToken);
         } else {
           console.log(error);
         }
@@ -87,7 +56,6 @@ function GetMyProduct() {
       console.log("No access token found");
     }
   };
-
   function renderData() {
     console.log(data);
     if (data) {
@@ -102,7 +70,7 @@ function GetMyProduct() {
             </td>
             <td>{item.price}</td>
             <td className="text-center">
-              <button className="btn btn-warning">Edit</button>
+              <Link className="btn btn-warning" to={`/account/edit-product/${item.id}`}>Edit</Link>
               <button
                 className="btn btn-danger"
                 onClick={() => handleDelete(item.id)}

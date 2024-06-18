@@ -54,7 +54,7 @@ function ListComment({ comment, onSetIDcha }) {
         const formatNam = format(parseISO(value.created_at), "dd/MM/yyyy");
         if (value.id_comment === onSetIDcha) {
           return (
-            <li className="media second-media">
+            <li key={key} className="media second-media">
               <a className="pull-left" href="#">
                 <img
                   className="media-object"
