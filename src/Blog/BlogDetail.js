@@ -8,7 +8,6 @@ import PostComment from "../Comment/PostComment";
 function BlogDetail(props) {
   let params = useParams();
   const [data, setData] = useState([]);
-  // const [comment, setComment] = useState([]);
   const [listCmt, setListCmt] = useState([]);
   const [IDcha, setIDcha] = useState(null);
   useEffect(() => {
@@ -18,7 +17,6 @@ function BlogDetail(props) {
           "http://localhost/laravel8/public/api/blog/detail/" + params.id
         );
         setListCmt(response.data.data.comment);
-        // console.table(response.data.data.comment);
         setData(response.data.data);
       } catch (error) {
         console.log("co loi  : ".error);
