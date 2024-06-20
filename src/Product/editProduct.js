@@ -19,7 +19,11 @@ function EditProduct(prop) {
     company: "",
     detail: "",
     status: "1",
+    images: [],
   });
+  const [selectedImagesToDelete, setSelectedImagesToDelete] = useState([]);
+  const [uploadedImages, setUploadedImages] = useState([]);
+  const [fileError, setFileError] = useState("");
 
   let params = useParams();
 
@@ -40,7 +44,6 @@ function EditProduct(prop) {
         setDataBrand(response.data.brand);
         setDataCategory(response.data.category);
 
-        // Cập nhật dữ liệu Sản phẩm với danh mục và nhãn hiệu đầu tiên nếu có (gán dữ liệu vào inputs)
         setDataProduct((prevDataProduct) => ({
           ...prevDataProduct,
           category:
@@ -77,6 +80,54 @@ function EditProduct(prop) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setDataProduct((state) => ({ ...state, [name]: value }));
+  };
+
+  // const handleCheckboxChange = (e) => {
+  //   const { value, checked } = e.target;
+  //   setSelectedImagesToDelete((prev) =>
+  //     checked ? [...prev, value] : prev.filter((img) => img !== value)
+  //   );
+  //   console.log(selectedImagesToDelete);
+  // };
+
+  const handleCheckboxChange = (e) => {
+    const { value, checked } = e.target;
+
+    // Clone the array and update based on checked state
+    setSelectedImagesToDelete((prev) => {
+      if (checked) {
+        return [...prev, value]; // Add image name to array
+      } else {
+        return prev.filter((img) => img !== value); // Remove image name from array
+      }
+    });
+  };
+
+  const handleUserInputFile = (e) => {
+    const files = Array.from(e.target.files);
+    if (
+      files.length +
+        dataProduct.images.length -
+        selectedImagesToDelete.length <=
+      3
+    ) {
+      setUploadedImages(files);
+      setFileError(""); // Reset file error
+      checkFileTypes(files); // Check file types
+    } else {
+      alert("Tổng số hình ảnh không được vượt quá 3.");
+    }
+  };
+
+  const checkFileTypes = (files) => {
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+    for (let file of files) {
+      if (!allowedTypes.includes(file.type)) {
+        setFileError(`Tệp '${file.name}' không phải là hình ảnh.`);
+        return;
+      }
+    }
+    setFileError("");
   };
 
   const handleSubmit = async (e) => {
@@ -116,12 +167,53 @@ function EditProduct(prop) {
       errorSubmit.detail = "Vui Lòng Nhập Mô Tả";
       flag = false;
     }
+    // if (
+    //   uploadedImages.length === 0 &&
+    //   dataProduct.images.length - selectedImagesToDelete.length === 0
+    // ) {
+    //   errorSubmit.images = "Vui lòng chọn ít nhất một hình ảnh.";
+    //   flag = false;
+    // }
+    // if (fileError !== "") {
+    //   flag = false;
+    // }
 
     if (!flag) {
       setErrors(errorSubmit);
     } else {
       setErrors({});
-      // Handle form submission logic here
+      const formData = new FormData();
+      formData.append("name", dataProduct.name);
+      formData.append("price", dataProduct.price);
+      formData.append("category", dataProduct.category);
+      formData.append("brand", dataProduct.brand);
+      formData.append("sale", dataProduct.sale);
+      formData.append("company", dataProduct.company);
+      formData.append("detail", dataProduct.detail);
+      formData.append("status", dataProduct.status);
+      selectedImagesToDelete.forEach((image) => {
+        formData.append("avatarCheckBox[]", image);
+      });
+      uploadedImages.forEach((file) => {
+        formData.append("images[]", file);
+      });
+
+      const headers = {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "multipart/form-data",
+      };
+
+      try {
+        const response = await axios.post(
+          "http://localhost/laravel8/public/api/user/product/update/" +
+            params.id,
+          formData,
+          { headers }
+        );
+        console.log(response.data);
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -202,14 +294,33 @@ function EditProduct(prop) {
                 placeholder="Detail"
                 onChange={handleChange}
               />
+
+              <div style={{ display: "flex", flexWrap: "wrap" }}>
+                {dataProduct.image &&
+                  dataProduct.image.map((image, index) => (
+                    <div key={index} style={{ margin: "5px" }}>
+                      <img src={image.url} alt={image.name} width="100" />
+                      <br />
+                      <input
+                        type="checkbox"
+                        value={image.name}
+                        onChange={handleCheckboxChange}
+                      />{" "}
+                      Xóa
+                    </div>
+                  ))}
+              </div>
+
               <input
                 multiple
                 type="file"
                 placeholder="avatar"
-                // onChange={handleUserInputFile}
+                onChange={handleUserInputFile}
               />
+              {fileError && <p style={{ color: "red" }}>{fileError}</p>}
+              {errors.images && <p style={{ color: "red" }}>{errors.images}</p>}
               <button type="submit" className="btn btn-default">
-                Signup
+                Update
               </button>
             </form>
           </div>
