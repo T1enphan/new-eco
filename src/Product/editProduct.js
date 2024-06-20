@@ -13,13 +13,13 @@ function EditProduct(prop) {
     id: "",
     name: "",
     price: "",
-    category: "",
-    brand: "",
+    id_category: "",
+    id_brand: "",
     sale: "",
-    company: "",
+    company_profile: "",
     detail: "",
     status: "1",
-    images: [],
+    image: [],
   });
   const [selectedImagesToDelete, setSelectedImagesToDelete] = useState([]);
   const [uploadedImages, setUploadedImages] = useState([]);
@@ -103,14 +103,17 @@ function EditProduct(prop) {
     });
   };
 
+  
+  console.log(selectedImagesToDelete);
+
+
   const handleUserInputFile = (e) => {
     const files = Array.from(e.target.files);
-    if (
-      files.length +
-        dataProduct.images.length -
-        selectedImagesToDelete.length <=
-      3
-    ) {
+
+    const existingImagesCount = Array.isArray(dataProduct.image) ? dataProduct.image.length : 0;
+    const selectedImagesToDeleteCount = selectedImagesToDelete.length;
+
+    if (files.length + existingImagesCount - selectedImagesToDeleteCount <= 3) {
       setUploadedImages(files);
       setFileError(""); // Reset file error
       checkFileTypes(files); // Check file types
@@ -134,7 +137,7 @@ function EditProduct(prop) {
     e.preventDefault();
     let errorSubmit = {};
     let flag = true;
-
+  
     if (dataProduct.name === "") {
       errorSubmit.name = "Vui Lòng Nhập Tên";
       flag = false;
@@ -167,17 +170,14 @@ function EditProduct(prop) {
       errorSubmit.detail = "Vui Lòng Nhập Mô Tả";
       flag = false;
     }
-    // if (
-    //   uploadedImages.length === 0 &&
-    //   dataProduct.images.length - selectedImagesToDelete.length === 0
-    // ) {
-    //   errorSubmit.images = "Vui lòng chọn ít nhất một hình ảnh.";
-    //   flag = false;
-    // }
-    // if (fileError !== "") {
-    //   flag = false;
-    // }
-
+    if (uploadedImages.length === 0 && dataProduct.image.length - selectedImagesToDelete.length === 0) {
+      errorSubmit.images = "Vui lòng chọn ít nhất một hình ảnh.";
+      flag = false;
+    }
+    if (fileError !== "") {
+      flag = false;
+    }
+  
     if (!flag) {
       setErrors(errorSubmit);
     } else {
@@ -185,28 +185,32 @@ function EditProduct(prop) {
       const formData = new FormData();
       formData.append("name", dataProduct.name);
       formData.append("price", dataProduct.price);
-      formData.append("category", dataProduct.category);
-      formData.append("brand", dataProduct.brand);
+      formData.append("category", dataProduct.id_category);
+      formData.append("brand", dataProduct.id_brand);
       formData.append("sale", dataProduct.sale);
-      formData.append("company", dataProduct.company);
+      formData.append("company", dataProduct.company_profile);
       formData.append("detail", dataProduct.detail);
       formData.append("status", dataProduct.status);
       selectedImagesToDelete.forEach((image) => {
         formData.append("avatarCheckBox[]", image);
       });
-      uploadedImages.forEach((file) => {
-        formData.append("images[]", file);
+      // uploadedImages.forEach((file) => {
+      //   formData.append("image", file);
+      // });
+      
+      uploadedImages.forEach((file, index) => {
+        formData.append(`file[${index}]`, file);
       });
+
 
       const headers = {
         Authorization: `Bearer ${accessToken}`,
         "Content-Type": "multipart/form-data",
       };
-
+  
       try {
         const response = await axios.post(
-          "http://localhost/laravel8/public/api/user/product/update/" +
-            params.id,
+          `http://localhost/laravel8/public/api/user/product/update/${params.id}`,
           formData,
           { headers }
         );
@@ -217,8 +221,108 @@ function EditProduct(prop) {
     }
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   let errorSubmit = {};
+  //   let flag = true;
+
+  //   if (dataProduct.name === "") {
+  //     errorSubmit.name = "Vui Lòng Nhập Tên";
+  //     flag = false;
+  //   }
+  //   if (dataProduct.brand === "") {
+  //     errorSubmit.brand = "Vui Lòng Nhập Brand";
+  //     flag = false;
+  //   }
+  //   if (dataProduct.category === "") {
+  //     errorSubmit.category = "Vui Lòng Nhập Category";
+  //     flag = false;
+  //   }
+  //   if (dataProduct.company === "") {
+  //     errorSubmit.company = "Vui Lòng Nhập Company";
+  //     flag = false;
+  //   }
+  //   if (dataProduct.price === "") {
+  //     errorSubmit.price = "Vui Lòng Nhập Giá";
+  //     flag = false;
+  //   }
+  //   if (dataProduct.status === 0 && dataProduct.sale === "") {
+  //     errorSubmit.sale = "Vui Lòng Nhập Sale";
+  //     flag = false;
+  //   }
+  //   if (dataProduct.status === "") {
+  //     errorSubmit.status = "Vui Lòng Nhập Trạng Thái";
+  //     flag = false;
+  //   }
+  //   if (dataProduct.detail === "") {
+  //     errorSubmit.detail = "Vui Lòng Nhập Mô Tả";
+  //     flag = false;
+  //   }
+  //   // if (
+  //   //   uploadedImages.length === 0 &&
+  //   //   dataProduct.images.length - selectedImagesToDelete.length === 0
+  //   // ) {
+  //   //   errorSubmit.images = "Vui lòng chọn ít nhất một hình ảnh.";
+  //   //   flag = false;
+  //   // }
+  //   // if (fileError !== "") {
+  //   //   flag = false;
+  //   // }
+
+  //   if (!flag) {
+  //     setErrors(errorSubmit);
+  //   } else {
+  //     setErrors({});
+  //     const formData = new FormData();
+  //     formData.append("name", dataProduct.name);
+  //     formData.append("price", dataProduct.price);
+  //     formData.append("category", dataProduct.category);
+  //     formData.append("brand", dataProduct.brand);
+  //     formData.append("sale", dataProduct.sale);
+  //     formData.append("company", dataProduct.company);
+  //     formData.append("detail", dataProduct.detail);
+  //     formData.append("status", dataProduct.status);
+  //     selectedImagesToDelete.forEach((image) => {
+  //       formData.append("avatarCheckBox[]", image);
+  //       console.log(image);
+  //     });
+  //     uploadedImages.forEach((file) => {
+  //       formData.append("images[]", file);
+  //       console.log(file);
+  //     });
+
+  //     const headers = {
+  //       Authorization: `Bearer ${accessToken}`,
+  //       "Content-Type": "multipart/form-data",
+  //     };
+
+  //     try {
+  //       const response = await axios.post(
+  //         "http://localhost/laravel8/public/api/user/product/update/" +
+  //         params.id,
+  //         formData,
+  //         { headers }
+  //       );
+  //       console.log(response.data);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  // };
+  function renderError() {
+    if (Object.keys(errors).length > 0) {
+      return (
+        <ul>
+          {Object.keys(errors).map((key, index) => (
+            <li key={index}>{errors[key]}</li>
+          ))}
+        </ul>
+      );
+    }
+  }
   return (
     <>
+    {renderError()}
       <div className="col-sm-9">
         <div className="blog-post-area">
           <h2 className="title text-center">My Product</h2>
@@ -241,7 +345,7 @@ function EditProduct(prop) {
                 onChange={handleChange}
               />
               <select
-                value={dataProduct.category}
+                value={dataProduct.id_category}
                 name="category"
                 onChange={handleChange}
               >
@@ -254,7 +358,7 @@ function EditProduct(prop) {
               </select>
 
               <select
-                value={dataProduct.brand}
+                value={dataProduct.id_brand}
                 name="brand"
                 onChange={handleChange}
               >
@@ -282,7 +386,7 @@ function EditProduct(prop) {
                 onChange={handleChange}
               />
               <input
-                value={dataProduct.company || ""}
+                value={dataProduct.company_profile || ""}
                 name="company"
                 type="text"
                 placeholder="Company"
@@ -297,13 +401,13 @@ function EditProduct(prop) {
 
               <div style={{ display: "flex", flexWrap: "wrap" }}>
                 {dataProduct.image &&
-                  dataProduct.image.map((image, index) => (
+                  dataProduct.image.map((value, index) => (
                     <div key={index} style={{ margin: "5px" }}>
-                      <img src={image.url} alt={image.name} width="100" />
+                      <img src={value} alt={value} width="100" />
                       <br />
                       <input
                         type="checkbox"
-                        value={image.name}
+                        value={value}
                         onChange={handleCheckboxChange}
                       />{" "}
                       Xóa
@@ -317,8 +421,6 @@ function EditProduct(prop) {
                 placeholder="avatar"
                 onChange={handleUserInputFile}
               />
-              {fileError && <p style={{ color: "red" }}>{fileError}</p>}
-              {errors.images && <p style={{ color: "red" }}>{errors.images}</p>}
               <button type="submit" className="btn btn-default">
                 Update
               </button>
