@@ -13,6 +13,8 @@ import AddProduct from "./Product/addProduct";
 import GetMyProduct from "./Product/getProduct";
 import EditProduct from "./Product/editProduct";
 import HomeProduct from "./Product/homeProduct";
+import DetailProduct from "./Product/detailProduct";
+import ShowCart from "./Product/Cart";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
@@ -23,10 +25,27 @@ root.render(
             path="/account/update"
             element={<UpdateAccount></UpdateAccount>}
           />
-          <Route path="/account/edit-product/:id" element={<EditProduct></EditProduct>}></Route>
-          <Route path="/home-page" element={<HomeProduct></HomeProduct>}></Route>
-          <Route path="/account/my-product" element={<GetMyProduct></GetMyProduct>}/>
-          <Route path="/account/add-product" element={<AddProduct></AddProduct>}/>
+          <Route path="/cart" element={<ShowCart></ShowCart>} />
+          <Route
+            path="/account/edit-product/:id"
+            element={<EditProduct></EditProduct>}
+          ></Route>
+          <Route
+            path="/home-page"
+            element={<HomeProduct></HomeProduct>}
+          ></Route>
+          <Route
+            path="/product/detail-product/:id"
+            element={<DetailProduct></DetailProduct>}
+          ></Route>
+          <Route
+            path="/account/my-product"
+            element={<GetMyProduct></GetMyProduct>}
+          />
+          <Route
+            path="/account/add-product"
+            element={<AddProduct></AddProduct>}
+          />
           <Route path="/blog-list" element={<Blog></Blog>} />
           <Route path="/blog-detail/:id" element={<BlogDetail></BlogDetail>} />
           <Route path="/register" element={<ActionRegister></ActionRegister>} />

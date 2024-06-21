@@ -12,11 +12,18 @@ function App(props) {
       <section>
         <div className="container">
           <div className="row">
-            {duongLink["pathname"].includes("account") ? (
+            {duongLink.pathname.includes(
+              "cart"
+            ) ? null : duongLink.pathname.includes("account") ? (
               <MenuAccount />
             ) : (
               <MenuLeft />
             )}
+            {/* {duongLink["pathname"].includes("account") ? (
+              <MenuAccount />
+            ) : (
+              <MenuLeft />
+            )} */}
             {/* <MenuAccount></MenuAccount> */}
             {props.children}
           </div>

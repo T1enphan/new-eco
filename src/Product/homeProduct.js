@@ -1,13 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-function HomeProduct() {
+import { Link } from "react-router-dom";
+function HomeProduct(props) {
   const [data, setData] = useState([]);
   useEffect(() => {
     axios
       .get("http://localhost/laravel8/public/api/product/wishlist")
       .then((res) => {
         setData(res.data.data);
-        console.log(res.data.data);
       })
       .catch((error) => console.log(error));
   }, []);
@@ -48,9 +48,9 @@ function HomeProduct() {
                     </a>
                   </li>
                   <li>
-                    <a href="">
-                      <i className="fa fa-plus-square"></i>Add to compare
-                    </a>
+                    <Link href="" to={`/product/detail-product/${value.id}`}>
+                      <i className="fa fa-plus-square"></i>More
+                    </Link>
                   </li>
                 </ul>
               </div>

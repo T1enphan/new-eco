@@ -57,10 +57,10 @@ function GetMyProduct() {
     }
   };
   function renderData() {
-    console.log(data);
     if (data) {
       return Object.keys(data).map((key, index) => {
         const item = data[key];
+        console.log(item);
         return (
           <tr key={index}>
             <th scope="row">{index + 1}</th>
@@ -70,7 +70,12 @@ function GetMyProduct() {
             </td>
             <td>{item.price}</td>
             <td className="text-center">
-              <Link className="btn btn-warning" to={`/account/edit-product/${item.id}`}>Edit</Link>
+              <Link
+                className="btn btn-warning"
+                to={`/account/edit-product/${item.id}`}
+              >
+                Edit
+              </Link>
               <button
                 className="btn btn-danger"
                 onClick={() => handleDelete(item.id)}
