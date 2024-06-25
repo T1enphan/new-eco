@@ -16,7 +16,6 @@ function Rate(props) {
     const storedLogin = localStorage.getItem("checkLogin");
     if (storedLogin) {
       const parsedLogin = JSON.parse(storedLogin);
-      console.log(parsedLogin);
       setIsLogin(true);
       setCheckLogin(parsedLogin);
       setAccessToken(parsedLogin.token);
@@ -43,7 +42,7 @@ function Rate(props) {
       navigate("/login");
       return false;
     }
-  }
+  };
 
   const changeRating = (newRating, name) => {
     if (checkLoginRate()) {
@@ -56,7 +55,7 @@ function Rate(props) {
           Accept: "application/json",
         },
       };
-      
+
       if (checkLogin && checkLogin.Auth) {
         const formData = new FormData();
         formData.append("blog_id", props.idBlog);
@@ -73,7 +72,7 @@ function Rate(props) {
           });
       }
     }
-  }
+  };
 
   return (
     <>
@@ -86,16 +85,28 @@ function Rate(props) {
               starRatedColor="blue"
               changeRating={changeRating}
               numberOfStars={5}
-              name='rating'
+              name="rating"
             />
           </li>
           <li className="color">(12 votes)</li>
         </ul>
         <ul className="tag">
           <li>TAG:</li>
-          <li><a className="color" href="">Pink <span>/</span></a></li>
-          <li><a className="color" href="">T-Shirt <span>/</span></a></li>
-          <li><a className="color" href="">Girls</a></li>
+          <li>
+            <a className="color" href="">
+              Pink <span>/</span>
+            </a>
+          </li>
+          <li>
+            <a className="color" href="">
+              T-Shirt <span>/</span>
+            </a>
+          </li>
+          <li>
+            <a className="color" href="">
+              Girls
+            </a>
+          </li>
         </ul>
       </div>
     </>

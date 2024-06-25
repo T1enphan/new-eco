@@ -8,6 +8,7 @@ function HomeProduct(props) {
       .get("http://localhost/laravel8/public/api/product/wishlist")
       .then((res) => {
         setData(res.data.data);
+        console.log(res.data.data);
       })
       .catch((error) => console.log(error));
   }, []);

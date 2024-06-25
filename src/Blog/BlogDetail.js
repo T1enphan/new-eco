@@ -38,9 +38,10 @@ function BlogDetail(props) {
     console.log("idCha từ blogDetail:", id);
   };
 
-  const getComment = (dataCmt) => {
-    setListCmt((preList) => [...preList, dataCmt]);
+  const handlePostComment = (dataCmt) => {
+    setListCmt([...listCmt, dataCmt]);
   };
+
   const fontSizeBlog = {
     fontSize: "20px",
   };
@@ -108,7 +109,7 @@ function BlogDetail(props) {
         {/* start replay */}
         <PostComment
           idBlog={params.id}
-          onComment={getComment}
+          onComment={handlePostComment}
           IDcha={IDcha}
         ></PostComment>
         {/* end replay */}

@@ -73,19 +73,12 @@ function PostComment(props) {
         formData.append("comment", input.comment);
         formData.append("image_user", checkLogin.Auth.avatar);
 
-        // // Log dữ liệu để kiểm tra
-        // console.log("Form Data:");
-        // console.log("id_blog:", props.idBlog);
-        // console.log("id_user:", checkLogin.Auth.id);
-        // console.log("name_user:", checkLogin.Auth.name);
-        // console.log("id_comment:", 0);
-        // console.log("comment:", input.comment);
-        // console.log("image_user:", checkLogin.Auth.avatar);
-
         axios
           .post(url, formData, config)
           .then((res) => {
             const dataCmt = res.data.data;
+            console.log("handleSubmit", dataCmt);
+            console.log("props.onComment", props.onComment);
             props.onComment(dataCmt);
             setInput({ comment: "" });
           })
@@ -119,8 +112,9 @@ function PostComment(props) {
                   rows="11"
                 ></textarea>
                 <button
+                  //Chú ý cái button type
                   type="submit"
-                  onClick={handelPostComment}
+                  // onClick={handelPostComment}
                   className="btn btn-primary"
                   href=""
                 >

@@ -1,14 +1,15 @@
 import { format, parseISO } from "date-fns";
 function ListComment({ comment, onSetIDcha }) {
-  function actionClickReplay(IDcha) {
-    console.log(IDcha);
-  }
+  // function actionClickReplay(IDcha) {
+  //   console.log(IDcha);
+  // }
+  console.log("comment", comment);
   function renderDataCha() {
     if (comment.length > 0) {
       return comment.map((value, key) => {
         const formatGio = format(parseISO(value.created_at), "HH:mm:ss");
         const formatNam = format(parseISO(value.created_at), "dd/MM/yyyy");
-        if (value.id_comment === 0) {
+        if (Number(value.id_comment) === 0) {
           return (
             <li key={key} className="media">
               <a className="pull-left" href="#">
