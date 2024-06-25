@@ -1,6 +1,6 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
-import { json, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 function ActionLogin() {
   const navigate = useNavigate();
   const [error, setErros] = useState({});
@@ -41,15 +41,13 @@ function ActionLogin() {
       axios
         .post("http://localhost/laravel8/public/api/login", data)
         .then((res) => {
-          console.log(res);
-          if (res.data.errors) {
-            setErros(res.data.error);
-          } else {
-            console.log(res);
+            console.log(res.data);
             localStorage.setItem("checkLogin", JSON.stringify(res.data));
             navigate("/blog-list");
-          }
-        });
+        })
+        .catch((error)=>{
+          console.log(error);
+        })
     }
   };
   return (

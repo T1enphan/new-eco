@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 function HomeProduct(props) {
   const [data, setData] = useState([]);
+  const [dataCart, setDataCart] = useState({})
   useEffect(() => {
     axios
       .get("http://localhost/laravel8/public/api/product/wishlist")
@@ -12,6 +13,25 @@ function HomeProduct(props) {
       })
       .catch((error) => console.log(error));
   }, []);
+  
+  // };
+  const addToCart = (product) => {
+    const productId = product.id;
+    const qty = 1
+    let cart = JSON.parse(localStorage.getItem('cart')) || {};
+    if (!cart[productId]) {
+      cart[productId] = qty;
+    }
+    localStorage.setItem('cart', JSON.stringify(cart));
+    console.log("Product added to cart:", cart);
+    axios.post("http://localhost/laravel8/public/api/product/cart", cart)
+    .then((res)=>{
+      console.log(res);
+    })
+    .catch((error)=>{
+      console.error(error);
+    })
+  };
   function renderData() {
     if (data.length > 0) {
       return data.map((value, key) => {
@@ -31,13 +51,14 @@ function HomeProduct(props) {
                   <div className="overlay-content">
                     <h2>{value.price}</h2>
                     <p>{value.name}</p>
-                    <a
+                    <button
                       href="#"
                       id="product1"
                       className="btn btn-default add-to-cart"
+                      onClick={()=>addToCart(value)}
                     >
-                      <i className="fa fa-shopping-cart"></i>Add to cart
-                    </a>
+                      <i className="fa fa-shopping-cart"></i>Add to cart1
+                    </button>
                   </div>
                 </div>
               </div>

@@ -1,4 +1,22 @@
-function ShowCart() {
+import axios from "axios";
+import { useEffect, useState } from "react";
+
+export default function ShowCart() {
+  const [data, setData] = useState([])
+  useEffect(()=>{
+    const dataCartLocal = localStorage.getItem("cart");
+    if(dataCartLocal){
+      const dataCart = JSON.parse(dataCartLocal);
+      console.log(dataCart);
+      axios.post("http://localhost/laravel8/public/api/product/cart",dataCart)
+      .then((res)=>{
+        console.log(res.data.data);
+      })
+      .catch((error)=>{
+        console.error(error);
+      })
+    }
+  },[])
   return (
     <div>
       <section id="cart_items">
@@ -214,4 +232,4 @@ function ShowCart() {
     </div>
   );
 }
-export default ShowCart;
+
