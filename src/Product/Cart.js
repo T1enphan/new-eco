@@ -1,33 +1,65 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { CartContext } from "./CartContext";
 
 export default function ShowCart() {
   const [data, setData] = useState([]);
+  const [cart, setCart] = useState({});
+  const { cartLength, setCartLength } = useContext(CartContext);
   useEffect(() => {
     const dataCartLocal = localStorage.getItem("cart");
     if (dataCartLocal) {
       const dataCart = JSON.parse(dataCartLocal);
+      setCart(dataCart); // Lưu dữ liệu vào trạng thái cart
       axios
         .post("http://localhost/laravel8/public/api/product/cart", dataCart)
         .then((res) => {
           setData(res.data.data);
+          setCartLength(res.data.data.length); // Cập nhật cartLength
         })
         .catch((error) => {
           console.error(error);
         });
     }
-  }, []);
-  // console.log(data);
-  const handleDelete = (key, value) => {
-    console.log(key);
-    // const newData = data.filter((_, index) => index !== key);
-    // setData(newData);
-    // localStorage.setItem("cart", JSON.stringify(newData));
+  }, [setCartLength]);
+
+  const handleDelete = (key) => {
+    const newCart = { ...cart };
+    delete newCart[key]; // Xóa mục khỏi object cart
+    setCart(newCart);
+    localStorage.setItem("cart", JSON.stringify(newCart)); // Cập nhật localStorage với object đã thay đổi
+
+    // Cập nhật data để hiển thị
+    const newData = data.filter((item) => item.id !== parseInt(key));
+    setData(newData);
+    setCartLength(newData.length);
   };
+
+  const handleIncreaseQty = (key) => {
+    const newCart = { ...cart, [key]: (cart[key] || 1) + 1 };
+    setCart(newCart);
+    localStorage.setItem("cart", JSON.stringify(newCart));
+  };
+
+  const handleDecreaseQty = (key) => {
+    const newCart = { ...cart, [key]: Math.max((cart[key] || 1) - 1, 1) };
+    setCart(newCart);
+    localStorage.setItem("cart", JSON.stringify(newCart));
+  };
+
+  const calculateTotal = () => {
+    return Object.keys(cart).reduce((total, key) => {
+      const item = data.find((item) => item.id == key);
+      return total + (item ? item.price * cart[key] : 0);
+    }, 0);
+  };
+
 
   function renderData() {
     if (data && data.length > 0) {
-      return data.map((value, key) => {
+      return data.map((value) => {
+        const key = value.id;
+        const total = value.price * cart[key];
         return (
           <tr key={key}>
             <td className="cart_product">
@@ -39,14 +71,14 @@ export default function ShowCart() {
               <h4>
                 <a href="">{value.name}</a>
               </h4>
-              <p>Web ID: 1089772</p>
+              <p>Web ID: {key}</p>
             </td>
             <td className="cart_price">
               <p>${value.price}</p>
             </td>
             <td className="cart_quantity">
               <div className="cart_quantity_button">
-                <a className="cart_quantity_up" href="">
+                <a  onClick={() => handleIncreaseQty(key)} className="cart_quantity_up">
                   {" "}
                   +{" "}
                 </a>
@@ -54,18 +86,18 @@ export default function ShowCart() {
                   className="cart_quantity_input"
                   type="text"
                   name="quantity"
-                  value="1"
-                  autocomplete="off"
+                  value={cart[key]}
+                  autoComplete="off"
                   size="2"
                 />
-                <a className="cart_quantity_down" href="">
+                <a  onClick={() => handleDecreaseQty(key)} className="cart_quantity_down">
                   {" "}
                   -{" "}
                 </a>
               </div>
             </td>
             <td className="cart_total">
-              <p className="cart_total_price">$59</p>
+              <p className="cart_total_price">${total}</p>
             </td>
             <td className="cart_delete">
               <button
@@ -81,7 +113,9 @@ export default function ShowCart() {
       });
     }
   }
-  renderData();
+
+
+  const total = calculateTotal();
   return (
     <div>
       <section id="cart_items">
@@ -193,7 +227,7 @@ export default function ShowCart() {
                     Shipping Cost <span>Free</span>
                   </li>
                   <li>
-                    Total <span id="total_price">$61</span>
+                    Total <span id="total_price">${total}</span>
                   </li>
                 </ul>
                 <a className="btn btn-default update" href="">
