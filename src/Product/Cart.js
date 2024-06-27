@@ -2,153 +2,131 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 export default function ShowCart() {
-  const [data, setData] = useState([])
-  useEffect(()=>{
+  const [data, setData] = useState([]);
+  useEffect(() => {
     const dataCartLocal = localStorage.getItem("cart");
-    if(dataCartLocal){
+    if (dataCartLocal) {
       const dataCart = JSON.parse(dataCartLocal);
-      console.log(dataCart);
-      axios.post("http://localhost/laravel8/public/api/product/cart",dataCart)
-      .then((res)=>{
-        console.log(res.data.data);
-      })
-      .catch((error)=>{
-        console.error(error);
-      })
+      axios
+        .post("http://localhost/laravel8/public/api/product/cart", dataCart)
+        .then((res) => {
+          setData(res.data.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
-  },[])
+  }, []);
+  // console.log(data);
+  const handleDelete = (key, value) => {
+    console.log(key);
+    // const newData = data.filter((_, index) => index !== key);
+    // setData(newData);
+    // localStorage.setItem("cart", JSON.stringify(newData));
+  };
+
+  function renderData() {
+    if (data && data.length > 0) {
+      return data.map((value, key) => {
+        return (
+          <tr key={key}>
+            <td className="cart_product">
+              <a href="">
+                <img src="images/cart/two.png" alt="" />
+              </a>
+            </td>
+            <td className="cart_description">
+              <h4>
+                <a href="">{value.name}</a>
+              </h4>
+              <p>Web ID: 1089772</p>
+            </td>
+            <td className="cart_price">
+              <p>${value.price}</p>
+            </td>
+            <td className="cart_quantity">
+              <div className="cart_quantity_button">
+                <a className="cart_quantity_up" href="">
+                  {" "}
+                  +{" "}
+                </a>
+                <input
+                  className="cart_quantity_input"
+                  type="text"
+                  name="quantity"
+                  value="1"
+                  autocomplete="off"
+                  size="2"
+                />
+                <a className="cart_quantity_down" href="">
+                  {" "}
+                  -{" "}
+                </a>
+              </div>
+            </td>
+            <td className="cart_total">
+              <p className="cart_total_price">$59</p>
+            </td>
+            <td className="cart_delete">
+              <button
+                className="cart_quantity_delete"
+                onClick={() => handleDelete(key)}
+                href=""
+              >
+                <i className="fa fa-times"></i>
+              </button>
+            </td>
+          </tr>
+        );
+      });
+    }
+  }
+  renderData();
   return (
     <div>
       <section id="cart_items">
-        <div class="container">
-          <div class="breadcrumbs">
-            <ol class="breadcrumb">
+        <div className="container">
+          <div className="breadcrumbs">
+            <ol className="breadcrumb">
               <li>
                 <a href="#">Home</a>
               </li>
-              <li class="active">Shopping Cart</li>
+              <li className="active">Shopping Cart</li>
             </ol>
           </div>
-          <div class="table-responsive cart_info">
-            <table class="table table-condensed">
+          <div className="table-responsive cart_info">
+            <table className="table table-condensed">
               <thead>
-                <tr class="cart_menu">
-                  <td class="image">Item</td>
-                  <td class="description"></td>
-                  <td class="price">Price</td>
-                  <td class="quantity">Quantity</td>
-                  <td class="total">Total</td>
+                <tr className="cart_menu">
+                  <td className="image">Item</td>
+                  <td className="description"></td>
+                  <td className="price">Price</td>
+                  <td className="quantity">Quantity</td>
+                  <td className="total">Total</td>
                   <td></td>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td class="cart_product">
-                    <a href="">
-                      <img src="images/cart/one.png" alt="" />
-                    </a>
-                  </td>
-                  <td class="cart_description">
-                    <h4>
-                      <a href="">Colorblock Scuba</a>
-                    </h4>
-                    <p>Web ID: 1089772</p>
-                  </td>
-                  <td class="cart_price">
-                    <p>$59</p>
-                  </td>
-                  <td class="cart_quantity">
-                    <div class="cart_quantity_button">
-                      <a class="cart_quantity_up" href="">
-                        {" "}
-                        +{" "}
-                      </a>
-                      <input
-                        class="cart_quantity_input"
-                        type="text"
-                        name="quantity"
-                        value="1"
-                        autocomplete="off"
-                        size="2"
-                      />
-                      <a class="cart_quantity_down" href="">
-                        {" "}
-                        -{" "}
-                      </a>
-                    </div>
-                  </td>
-                  <td class="cart_total">
-                    <p class="cart_total_price">$59</p>
-                  </td>
-                  <td class="cart_delete">
-                    <a class="cart_quantity_delete" href="">
-                      <i class="fa fa-times"></i>
-                    </a>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td class="cart_product">
-                    <a href="">
-                      <img src="images/cart/two.png" alt="" />
-                    </a>
-                  </td>
-                  <td class="cart_description">
-                    <h4>
-                      <a href="">Colorblock Scuba</a>
-                    </h4>
-                    <p>Web ID: 1089772</p>
-                  </td>
-                  <td class="cart_price">
-                    <p>$59</p>
-                  </td>
-                  <td class="cart_quantity">
-                    <div class="cart_quantity_button">
-                      <a class="cart_quantity_up" href="">
-                        {" "}
-                        +{" "}
-                      </a>
-                      <input
-                        class="cart_quantity_input"
-                        type="text"
-                        name="quantity"
-                        value="1"
-                        autocomplete="off"
-                        size="2"
-                      />
-                      <a class="cart_quantity_down" href="">
-                        {" "}
-                        -{" "}
-                      </a>
-                    </div>
-                  </td>
-                  <td class="cart_total">
-                    <p class="cart_total_price">$59</p>
-                  </td>
-                  <td class="cart_delete">
-                    <a class="cart_quantity_delete" href="">
-                      <i class="fa fa-times"></i>
-                    </a>
-                  </td>
-                </tr>
+                {/* san pham */}
+                {renderData()}
               </tbody>
             </table>
           </div>
         </div>
       </section>
       <section id="do_action">
-        <div class="container">
-          <div class="heading">
+        <div className="container">
+          <div className="heading">
             <h3>What would you like to do next?</h3>
             <p>
               Choose if you have a discount code or reward points you want to
               use or would like to estimate your delivery cost.
             </p>
           </div>
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="chose_area">
-                <ul class="user_option">
+          <div className="row">
+            <div className="col-sm-6">
+              <div className="chose_area">
+                <ul className="user_option">
                   <li>
                     <input type="checkbox" />
                     <label>Use Coupon Code</label>
@@ -162,8 +140,8 @@ export default function ShowCart() {
                     <label>Estimate Shipping & Taxes</label>
                   </li>
                 </ul>
-                <ul class="user_info">
-                  <li class="single_field">
+                <ul className="user_info">
+                  <li className="single_field">
                     <label>Country:</label>
                     <select>
                       <option>United States</option>
@@ -176,7 +154,7 @@ export default function ShowCart() {
                       <option>Dubai</option>
                     </select>
                   </li>
-                  <li class="single_field">
+                  <li className="single_field">
                     <label>Region / State:</label>
                     <select>
                       <option>Select</option>
@@ -189,21 +167,21 @@ export default function ShowCart() {
                       <option>Dubai</option>
                     </select>
                   </li>
-                  <li class="single_field zip-field">
+                  <li className="single_field zip-field">
                     <label>Zip Code:</label>
                     <input type="text" />
                   </li>
                 </ul>
-                <a class="btn btn-default update" href="">
+                <a className="btn btn-default update" href="">
                   Get Quotes
                 </a>
-                <a class="btn btn-default check_out" href="">
+                <a className="btn btn-default check_out" href="">
                   Continue
                 </a>
               </div>
             </div>
-            <div class="col-sm-6">
-              <div class="total_area">
+            <div className="col-sm-6">
+              <div className="total_area">
                 <ul>
                   <li>
                     Cart Sub Total <span>$59</span>
@@ -218,10 +196,10 @@ export default function ShowCart() {
                     Total <span id="total_price">$61</span>
                   </li>
                 </ul>
-                <a class="btn btn-default update" href="">
+                <a className="btn btn-default update" href="">
                   Update
                 </a>
-                <a class="btn btn-default check_out" href="">
+                <a className="btn btn-default check_out" href="">
                   Check Out
                 </a>
               </div>
@@ -232,4 +210,3 @@ export default function ShowCart() {
     </div>
   );
 }
-
