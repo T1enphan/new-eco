@@ -1,50 +1,59 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { CartContext } from "./CartContext";
+import { CartContext } from "../Product/CartContext";
 
 export default function ShowCart() {
   const [data, setData] = useState([]);
   const [cart, setCart] = useState({});
   const { cartLength, setCartLength } = useContext(CartContext);
+
   useEffect(() => {
     const dataCartLocal = localStorage.getItem("cart");
     if (dataCartLocal) {
       const dataCart = JSON.parse(dataCartLocal);
-      setCart(dataCart); // Lưu dữ liệu vào trạng thái cart
+      setCart(dataCart);
       axios
         .post("http://localhost/laravel8/public/api/product/cart", dataCart)
         .then((res) => {
           setData(res.data.data);
-          setCartLength(res.data.data.length); // Cập nhật cartLength
+          setCartLength(
+            Object.keys(dataCart).reduce((sum, key) => sum + dataCart[key], 0)
+          ); // Cập nhật cartLength
         })
         .catch((error) => {
           console.error(error);
         });
     }
-  }, [setCartLength]);
+  }, []);
 
   const handleDelete = (key) => {
     const newCart = { ...cart };
-    delete newCart[key]; // Xóa mục khỏi object cart
+    delete newCart[key];
     setCart(newCart);
-    localStorage.setItem("cart", JSON.stringify(newCart)); // Cập nhật localStorage với object đã thay đổi
-
-    // Cập nhật data để hiển thị
+    localStorage.setItem("cart", JSON.stringify(newCart));
     const newData = data.filter((item) => item.id !== parseInt(key));
     setData(newData);
-    setCartLength(newData.length);
+    setCartLength(
+      Object.keys(newCart).reduce((sum, key) => sum + newCart[key], 0)
+    ); // Cập nhật cartLength
   };
 
   const handleIncreaseQty = (key) => {
     const newCart = { ...cart, [key]: (cart[key] || 1) + 1 };
     setCart(newCart);
     localStorage.setItem("cart", JSON.stringify(newCart));
+    setCartLength(
+      Object.keys(newCart).reduce((sum, key) => sum + newCart[key], 0)
+    ); // Cập nhật cartLength
   };
 
   const handleDecreaseQty = (key) => {
     const newCart = { ...cart, [key]: Math.max((cart[key] || 1) - 1, 1) };
     setCart(newCart);
     localStorage.setItem("cart", JSON.stringify(newCart));
+    setCartLength(
+      Object.keys(newCart).reduce((sum, key) => sum + newCart[key], 0)
+    ); // Cập nhật cartLength
   };
 
   const calculateTotal = () => {
@@ -53,7 +62,6 @@ export default function ShowCart() {
       return total + (item ? item.price * cart[key] : 0);
     }, 0);
   };
-
 
   function renderData() {
     if (data && data.length > 0) {
@@ -78,7 +86,10 @@ export default function ShowCart() {
             </td>
             <td className="cart_quantity">
               <div className="cart_quantity_button">
-                <a  onClick={() => handleIncreaseQty(key)} className="cart_quantity_up">
+                <a
+                  onClick={() => handleIncreaseQty(key)}
+                  className="cart_quantity_up"
+                >
                   {" "}
                   +{" "}
                 </a>
@@ -90,7 +101,10 @@ export default function ShowCart() {
                   autoComplete="off"
                   size="2"
                 />
-                <a  onClick={() => handleDecreaseQty(key)} className="cart_quantity_down">
+                <a
+                  onClick={() => handleDecreaseQty(key)}
+                  className="cart_quantity_down"
+                >
                   {" "}
                   -{" "}
                 </a>
@@ -113,8 +127,6 @@ export default function ShowCart() {
       });
     }
   }
-
-
   const total = calculateTotal();
   return (
     <div>

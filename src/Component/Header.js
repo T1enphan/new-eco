@@ -1,14 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { CartContext } from "../Product/CartContext";
 
 function Header(props) {
   const [isLogin, setIsLogin] = useState(false);
   const navigate = useNavigate();
+  const { cartLength, wishlistCount } = useContext(CartContext); // Sử dụng CartContext để lấy cartLength
 
   useEffect(() => {
     const checkLogin = localStorage.getItem("checkLogin");
     if (checkLogin) {
-      // console.log(checkLogin);
       setIsLogin(true);
     }
   }, []);
@@ -136,6 +137,10 @@ function Header(props) {
                     <li>
                       <a href="">
                         <i className="fa fa-star"></i> Wishlist
+                        {wishlistCount > 0 && (
+                          <span className="badge">{wishlistCount}</span>
+                        )}{" "}
+                        {/* Hiển thị số lượng giỏ hàng */}
                       </a>
                     </li>
                     <li>
@@ -146,6 +151,10 @@ function Header(props) {
                     <li>
                       <a href="cart.html">
                         <i className="fa fa-shopping-cart"></i> Cart
+                        {cartLength > 0 && (
+                          <span className="badge">{cartLength}</span>
+                        )}{" "}
+                        {/* Hiển thị số lượng giỏ hàng */}
                       </a>
                     </li>
                     <li>
@@ -209,7 +218,6 @@ function Header(props) {
                         </li>
                         <li>
                           <a href="login.html">Login</a>
-                          {/* day roi */}
                         </li>
                       </ul>
                     </li>
@@ -247,4 +255,5 @@ function Header(props) {
     </>
   );
 }
+
 export default Header;
